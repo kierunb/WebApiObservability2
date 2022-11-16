@@ -1,0 +1,23 @@
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+
+public class SampleHealthCheck : IHealthCheck
+{
+    public Task<HealthCheckResult> CheckHealthAsync(
+        HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        var isHealthy = true;
+
+        if (DateTime.Now.Second % 2 == 0) 
+            isHealthy = false;
+
+        if (isHealthy)
+        {
+            return Task.FromResult(
+                HealthCheckResult.Healthy("A healthy result."));
+        }
+
+        return Task.FromResult(
+            new HealthCheckResult(
+                context.Registration.FailureStatus, "An unhealthy result."));
+    }
+}
